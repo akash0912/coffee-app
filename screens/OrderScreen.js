@@ -28,12 +28,12 @@ const OrderScreen = (props) => {
 
 
   useEffect(()=>{
-    props.navigation.addListener('willFocus', loadOrders)
+   const unsubscribe = props.navigation.addListener('focus', loadOrders);
 
-    return()=>[
-      props.navigation.removeListener('willFocus',loadOrders)
-    ]
-  })
+    return()=>{
+      unsubscribe();
+  }
+  },[loadOrders])
   useEffect(()=>{
     setIsLoading(true);
     loadOrders().then(()=>{
