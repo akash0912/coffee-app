@@ -28,6 +28,10 @@ const OrderScreen = (props) => {
 
 
   useEffect(()=>{
+    orders.sort((a,b)=>a._id>b._id)
+  },[orders])
+
+  useEffect(()=>{
    const unsubscribe = props.navigation.addListener('focus', loadOrders);
 
     return()=>{

@@ -1,8 +1,8 @@
 class Coffee{
-    constructor(id, name,imageUrl, ingredients, price ){
+    constructor(id, name,image, ingredients, price ){
         this.id = id;
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.ingredients = ingredients;
         this.price = price;
     }

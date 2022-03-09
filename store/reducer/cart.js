@@ -9,28 +9,28 @@ export default (state = initialState, action)=>{
     switch(action.type){
         case ADD_TO_CART:
             const addedItem = action.product;
-            // console.log(addedItem.id)
+            
             const price = addedItem.price;
             const name = addedItem.name;
             let updatedProduct ;
-            // console.log(addedItem.id)
-            if(state.items[addedItem.id]){
+            
+            if(state.items[addedItem._id]){
                 updatedProduct = new Cart(
-                    addedItem.id,
-                    state.items[addedItem.id].quantity + 1,
+                    addedItem._id,
+                    state.items[addedItem._id].quantity + 1,
                     name,
                     price,
-                    state.items[addedItem.id].sum + price
+                    state.items[addedItem._id].sum + price
                 );
             
             }else{
-                updatedProduct = new Cart(addedItem.id, 1, name, price, price )
+                updatedProduct = new Cart(addedItem._id, 1, name, price, price )
             }
-            // console.log(state)
+           
 
             return{
                
-                items: {...state.items, [addedItem.id]: updatedProduct},
+                items: {...state.items, [addedItem._id]: updatedProduct},
                 totalAmount : state.totalAmount + price
             };
             case REMOVE_FROM_CART:

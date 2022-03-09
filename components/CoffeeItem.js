@@ -11,7 +11,7 @@ import Colors from "../constants/Colors";
 
 const CoffeeItem = (props) => {
   return (
-    <TouchableNativeFeedback onPress={props.onSelect}>
+    <TouchableNativeFeedback onPress={props.onSelect} onLongPress={props.onLongPress}>
       <View style={styles.screen}>
         <View style={styles.item}>
           <View style={styles.container}>

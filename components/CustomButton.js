@@ -6,7 +6,7 @@ import Colors from "../constants/Colors";
 const CustomButton = (props) => {
   return (
     <View style={{...styles.screen,...props.style}}>
-    <TouchableNativeFeedback onPress={props.onSelect} >
+    <TouchableNativeFeedback onPress={props.onSelect} onClick={props.onSelect} >
         <View style={styles.button}>
         {props.children}
         </View>

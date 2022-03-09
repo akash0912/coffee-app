@@ -14,24 +14,22 @@ const StartUpScreen = () => {
             if(!userData){
               // props.navigation.navigate('Auth');
               dispatch(authActions.setDidTryAl());
-            //   console.log('b')
+            
               return;
             }            
             const transformedData = JSON.parse(userData);
-            const {token, userId, expiryDate} = transformedData;
-            // console.log(token)
-            // console.log(userId)
-            // console.log(expiryDate)
+            const {token, userId, role, expiryDate} = transformedData;
+         
             const expirationDate = new Date(expiryDate);
             if(expirationDate <= new Date() || !token || !userId){
               // props.navigation.navigate('Auth');
               dispatch(authActions.setDidTryAl());
-            //   console.log('a')
+          
               return;
             }
             const expiryTime = expirationDate.getTime() - new Date().getTime();
             // props.navigation.navigate('drawer');
-            dispatch(authActions.authenticate(token, userId, expiryTime))
+            dispatch(authActions.authenticate(token, userId, role, expiryTime))
 
         }
 

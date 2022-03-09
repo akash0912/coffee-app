@@ -10,9 +10,11 @@ import CoffeeOverviewScreen, {
   coffeeOverviewOptions,
 } from "../screens/CoffeeOverviewScreen";
 import OrderScreen, { orderOptions } from "../screens/OrderScreen";
+import DashboardScreen, { dashboardOptions } from "../screens/DashBoardScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Logout from "../components/Logout";
 import AuthScreen,{authOptions} from "../screens/AuthScreen";
+import {useSelector} from 'react-redux';
 const MyStack = createNativeStackNavigator();
 const MyDrawer = createDrawerNavigator();
 
@@ -61,21 +63,28 @@ const OrderNavigator = () => {
     </MyStack.Navigator>
   );
 };
+const AdminNavigator = () => {
+  return (
+    <MyStack.Navigator screenOptions={defaultOptions}>
+      <MyStack.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={dashboardOptions}
+      />
+    </MyStack.Navigator>
+  );
+};
 export const ShopNavigator = () => {
+  const role = useSelector(state=>state.auth.role)
   return (
     <MyDrawer.Navigator
       screenOptions={{
         headerShown: false,
         drawerActiveTintColor: Colors.secondary,
-        
       }}
-      drawerContent={
-        (props)=>{
-            return (
-                <Logout {...props}/>
-            )
-        }
-      }
+      drawerContent={(props) => {
+        return <Logout {...props} />;
+      }}
     >
       <MyDrawer.Screen
         name="Coffees"
@@ -103,6 +112,19 @@ export const ShopNavigator = () => {
           ),
         }}
       />
+      {role==="admin" && <MyDrawer.Screen
+        name="Admin"
+        component={AdminNavigator}
+        options={{
+          drawerIcon: (drawerConfig) => (
+            <Ionicons
+              name={Platform.OS === "android" ? "bar-chart" : "ios-list"}
+              size={23}
+              color={drawerConfig.drawerActiveTintColor}
+            />
+          ),
+        }}
+      />}
     </MyDrawer.Navigator>
   );
 };
