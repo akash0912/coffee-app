@@ -8,7 +8,7 @@ export default(state = initialState, action)=>{
     switch(action.type){
         case ON_ORDER:
             const newOrder =new Order(
-                Math.random(),
+                action.orderData.id,
                 action.orderData.items,
                 action.orderData.totalAmount,
                 action.orderData.date
