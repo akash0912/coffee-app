@@ -6,24 +6,43 @@ import {
   Dimensions,
   Button,
 } from "react-native";
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import PRODUCTS from "../data/dummyData";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import CustomButton from "../components/CustomButton";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import * as cartActions from '../store/actions/cart';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../components/HeaderButton";
 import { StatusBar } from "expo-status-bar";
 const CoffeeDetailScreen = (props) => {
+  const {navigation} = props
   const [isAdded, setIsAdded] = useState(false);
+  const [temp, setTemp] = useState([])
   const { id } = props.route.params;
-  const selectedItem = PRODUCTS.find((item) => item.id === id);
+  const products = useSelector(state=>state.product.availableProducts)
+
+  useEffect(()=>{
+    let cancel = false
+    if(cancel) {return}
+    if(products && products.length >=0){
+      setTemp([...products])
+    }
+    return()=>{
+      cancel = true
+    }
+  },[products])
+  const selectedItem = temp?.find((item) => item._id === id);
   const dispatch = useDispatch();
+useEffect(()=>{
+  navigation.setOptions({
+    title: selectedItem?.name,
+  });
+}, [selectedItem])
   const onAddtoCartHandler=()=>{
-    setIsAdded(true)
     dispatch(cartActions.addtoCart(selectedItem))
+    // navigation.goBack();
   }
   return (
     <ScrollView
@@ -31,14 +50,14 @@ const CoffeeDetailScreen = (props) => {
     >
       <View>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: selectedItem.imageUrl }} style={styles.image} />
+          <Image source={{ uri: selectedItem?.image }} style={styles.image} />
         </View>
         <View style={styles.screen}>
-          <Text style={styles.text}>Price: ${selectedItem.price.toFixed(2)}</Text>
+          <Text style={styles.text}>Price: ₹{selectedItem?.price.toFixed(2)}</Text>
           
           <View style={{marginTop: 30}}>
           <Text style={styles.text1}>Ingredients</Text>
-          {selectedItem.ingredients.map((item, key) => (
+          {selectedItem?.ingredients.map((item, key) => (
             <View style={styles.ingContainer} key={key}>
               <Text style={styles.ingredients}>{item}</Text>
             </View>
@@ -71,9 +90,8 @@ const CoffeeDetailScreen = (props) => {
 export default CoffeeDetailScreen;
 export const coffeeDetailOptions = (navData) => {
   const { id } = navData.route.params;
-  const selectedItem = PRODUCTS.find((item) => item.id === id);
   return {
-    title: selectedItem.name,
+    
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item

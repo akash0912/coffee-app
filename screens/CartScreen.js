@@ -17,10 +17,9 @@ const CartScreen = (props) => {
   const [error, setError] = useState()
   const cartData = useSelector((state) => {
     const transformed = [];
-
     for (const key in state.cart.items) {
       transformed.push({
-        id: key,
+        _id: key,
         quantity: state.cart.items[key].quantity,
         price: state.cart.items[key].price,
         name: state.cart.items[key].name,
@@ -36,11 +35,14 @@ const CartScreen = (props) => {
         name={itemData.item.name}
         quantity={itemData.item.quantity}
         price={itemData.item.sum}
-        onAddToCart={() => dispatch(cartActions.addtoCart(itemData.item))}
+        onAddToCart={() => {
+          dispatch(cartActions.addtoCart(itemData.item))}}
         onRemoveCart={() =>
-          dispatch(cartActions.removeFromCart(itemData.item.id))
+          {
+          dispatch(cartActions.removeFromCart(itemData.item._id))
+          }
         }
-        removeCartItem={()=>dispatch(cartActions.deleteItem(itemData.item.id))}
+        removeCartItem={()=>dispatch(cartActions.deleteItem(itemData.item._id))}
         deletable={true}
       />
     );
@@ -59,6 +61,7 @@ const CartScreen = (props) => {
       // props.navigation.navigate('Orders',{
       //   clearStack: true
       // })
+      setIsLoading(false)
       props.navigation.dispatch(
         StackActions.replace('CoffeeOverview')
       )
@@ -66,13 +69,12 @@ const CartScreen = (props) => {
     }catch(err){
       setError(err.message)
     }
-    setIsLoading(false)
   }
   return (
     <View style={styles.screen}>
       <Card style={styles.card}>
         <View style={styles.orderContainer}>
-          <Text style={styles.text1}> Total: ${cartTotalAmount}</Text>
+          <Text style={styles.text1}> Total: ₹{cartTotalAmount}</Text>
           {isLoading?<ActivityIndicator size='small' color={Colors.secondary} style={styles.indicator}/>:<CustomButton onSelect={orderData}>
             <Text style={styles.text}>Order Now</Text>
           </CustomButton>}
@@ -82,7 +84,7 @@ const CartScreen = (props) => {
         <FlatList
           data={cartData}
           renderItem={renderCartItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
         />
       </View>
       <StatusBar style="auto" />
